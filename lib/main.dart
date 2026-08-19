@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'counter_model.dart';
+
 void main() {
   runApp(const MainApp());
 }
@@ -22,26 +24,23 @@ class CounterPage extends StatefulWidget {
 }
 
 class _CounterPageState extends State<CounterPage> {
-  int _counter = 0;
+  @override
+  void initState() {
+    super.initState();
+    _loadCounter();
+  }
 
-  void _incrementCounter() => setState(() {
-    _counter++;
-    print(_counter);
-  });
-
-  void _decrementCounter() => setState(() {
-    (_counter > 0) ? _counter-- : _counter = 0;
-  });
+  CounterModel counter = CounterModel();
 
   Future<void> _saveCounter() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('counter', _counter);
+    await prefs.setInt('counter', counter.count);
   }
 
   Future<void> _loadCounter() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _counter = prefs.getInt('counter') ?? 0;
+      counter.count = prefs.getInt('counter') ?? 0;
     });
   }
 
@@ -61,7 +60,7 @@ class _CounterPageState extends State<CounterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '$_counter',
+              '${counter.count}',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -79,7 +78,9 @@ class _CounterPageState extends State<CounterPage> {
                     ),
                   ),
                   onPressed: () {
-                    _decrementCounter();
+                    setState(() {
+                      counter.decrementCounter();
+                    });
                   },
                   icon: Icon(Icons.remove, color: Colors.white),
                 ),
@@ -91,7 +92,9 @@ class _CounterPageState extends State<CounterPage> {
                     ),
                   ),
                   onPressed: () {
-                    _incrementCounter();
+                    setState(() {
+                      counter.incrementCounter();
+                    });
                   },
                   icon: Icon(Icons.add, color: Colors.white),
                 ),
@@ -105,13 +108,6 @@ class _CounterPageState extends State<CounterPage> {
               },
               child: Text(
                 'Save Counter',
-                style: TextStyle(color: Colors.white),
-              ),
-            ),
-            TextButton(
-              onPressed: _loadCounter,
-              child: Text(
-                'Load Counter',
                 style: TextStyle(color: Colors.white),
               ),
             ),

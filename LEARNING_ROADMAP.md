@@ -207,7 +207,7 @@ class _CounterPageState extends State<CounterPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('$_count', style: Theme.of(context).textTheme.displayLarge),
+            Text('$_count', style: TextStyle( color: Colors.red)),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
