@@ -11,7 +11,7 @@ void main() {
   test('Counter increments', () {
     final model = CounterModel();
     model.incrementCounter();
-    expect(model.count, 10);
+    expect(model.count, 1);
   });
 
   test('Counter decrements', () {
